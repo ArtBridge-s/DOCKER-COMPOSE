@@ -1,6 +1,6 @@
 services:
   artist:
-    image: imkunyoung/artist-gateway:latest
+    image: imkunyoung/a-artist:latest
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
@@ -22,7 +22,7 @@ services:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   artwork:
-    image: imkunyoung/artwork-gateway:latest
+    image: imkunyoung/a-artwork:latest
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
@@ -44,7 +44,7 @@ services:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   gateway:
-    image: imkunyoung/artbridge-gateway:latest
+    image: imkunyoung/gateway-a:latest
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
@@ -57,7 +57,7 @@ services:
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - "8082:8000"
+      - "8000:8000"
   gateway-mariadb:
     image: mariadb:10.8.3
     volumes:
