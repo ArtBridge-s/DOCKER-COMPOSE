@@ -1,9 +1,3 @@
-# JHipster generated Docker-Compose configuration
-
-## Usage
-
-Launch all your infrastructure by running: `docker-compose up -d`.
-
 ## Configured Docker services
 
 ### Service registry and configuration server:
@@ -16,8 +10,8 @@ Launch all your infrastructure by running: `docker-compose up -d`.
 - Artist's mariadb database
 - Artwork (microservice application)
 - Artwork's mariadb database
-- Gateway (gateway application)
-- Gateway's mariadb database
+- Auth (microservice application)
+- Auth's mariadb database
 
 ### Additional Services:
 
