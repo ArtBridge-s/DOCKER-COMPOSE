@@ -4,14 +4,12 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mariadb://artist-mariadb:3306/artist?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
-#      - SPRING_LIQUIBASE_URL=jdbc:mariadb://artist-mariadb:3306/artist?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_SLEEP=30
+      - SPRING_DATASOURCE_TYPE=com.zaxxer.hikari.HikariDataSource
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
       - JHIPSTER_REGISTRY_PASSWORD=admin
   artist-mariadb:
@@ -22,8 +20,7 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=artist
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
-    ports:
-      - "8081:8081"
+
   artwork:
     image: imkunyoung/a-artwork:latest
     environment:
@@ -35,12 +32,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://artwork-mariadb:3306/artwork?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
-#      - SPRING_LIQUIBASE_URL=jdbc:mariadb://artwork-mariadb:3306/artwork?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_SLEEP=30
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
       - JHIPSTER_REGISTRY_PASSWORD=admin
-    ports:
-      - "8002:8002"
   artwork-mariadb:
     image: mariadb:10.8.3
     volumes:
@@ -60,9 +53,7 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mariadb://gateway-mariadb:3306/gateway?useLegacyDatetimeCode=false&serverTimezone=UTC
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://gateway-mariadb:3306/gateway?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_SLEEP=30
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
-#      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
       - "80:80"
@@ -75,6 +66,22 @@ services:
       - MYSQL_DATABASE=gateway
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
+  exhibition:
+    image: exhibition
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_DATA_MONGODB_URI=mongodb://exhibition-mongodb:27017
+      - SPRING_DATA_MONGODB_DATABASE=Exhibition
+      - JHIPSTER_SLEEP=30
+      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  exhibition-mongodb:
+    image: mongo:4.4.15
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.1
     environment:
@@ -82,15 +89,14 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_SYNC_LIMIT: 2
   kafka:
-    container_name: kafka
     image: confluentinc/cp-kafka:7.2.1
-    ports:
-      - '127.0.0.1:9092:9092'
     environment:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_BROKER_ID: 2
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 10
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      #ports:
+      # - 9092:9092 # Uncomment to make Kafka available externally
   jhipster-registry:
     image: jhipster/jhipster-registry:v7.3.0
     volumes:
@@ -101,7 +107,7 @@ services:
     # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_PROFILES_ACTIVE=dev
       - SPRING_SECURITY_USER_PASSWORD=admin
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
@@ -111,7 +117,7 @@ services:
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
     ports:
-      - "8761:8761"
+      - 8761:8761
 
   prometheus:
     image: prom/prometheus:v2.38.0

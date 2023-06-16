@@ -35,3 +35,4 @@ scrape_configs:
           - Artist:8080
           - Artwork:8081
           - Gateway:8082
+          - Exhibition:8083
