@@ -32,7 +32,7 @@ scrape_configs:
     metrics_path: /management/prometheus
     static_configs:
       - targets:
-          - Artist:8080
-          - Artwork:8081
-          - Gateway:8082
-          - Exhibition:8083
+          - Artist:8001
+          - Artwork:8002
+          - Gateway:80
+          - Exhibition:8003
