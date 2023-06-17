@@ -81,7 +81,7 @@ services:
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+#      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/ArtBridge-s/CENTRAL-CONFIG/blob/main/config.yml
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
     ports:
